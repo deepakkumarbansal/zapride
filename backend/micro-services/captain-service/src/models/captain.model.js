@@ -53,7 +53,7 @@ const captainSchema = new Schema(
                 required: true,
             },
             type: {
-                String,
+                type: String,
                 required: true,
                 enum: ["car", "auto", "bike"],
             },
@@ -62,7 +62,7 @@ const captainSchema = new Schema(
                 required: true,
             },
             capacity: {
-                type: String,
+                type: Number,
                 required: true,
             },
         },

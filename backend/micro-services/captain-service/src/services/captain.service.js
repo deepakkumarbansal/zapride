@@ -45,7 +45,7 @@ export const logoutCaptain = async ({ token, captainId }) => {
     if (!token) {
         throw new ApiError(STATUS_CODES.BAD_REQUEST.code, "Token required");
     }
-    await Captain.findByIdAndUpdate(captainId, {isActive: false})
+    await Captain.findByIdAndUpdate(captainId, { isActive: false });
     await BlackListedToken.create({ token });
 };
 

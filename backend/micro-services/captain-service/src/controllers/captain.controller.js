@@ -41,16 +41,17 @@ export const login = asyncHandler(async (req, res, next) => {
 
 export const logout = asyncHandler(async (req, res, next) => {
     const token = req.cookies.token || req.headers.authorization?.split(" ")?.[1];
-    const {_id : captainId} = req.captain
-    await logoutCaptain({token, captainId});
-    res
-    .clearCookie("token", cookieOptions)
-    .status(STATUS_CODES.SUCCESS.code)
-    .json(new ApiResponse(STATUS_CODES.SUCCESS.code, "Logout captain Successfully"))
+    const { _id: captainId } = req.captain;
+    await logoutCaptain({ token, captainId });
+    res.clearCookie("token", cookieOptions)
+        .status(STATUS_CODES.SUCCESS.code)
+        .json(new ApiResponse(STATUS_CODES.SUCCESS.code, "Logout captain Successfully"));
 });
 
 export const getProfile = asyncHandler(async (req, res, next) => {
-    const {_id: captainId} = req.captain;
-    const captain = await getCaptainProfile({captainId});
-    res.status(STATUS_CODES.SUCCESS.code).json(new ApiResponse(STATUS_CODES.SUCCESS.code, "Captain profile fetched successfully", {captain}));
-})
+    const { _id: captainId } = req.captain;
+    const captain = await getCaptainProfile({ captainId });
+    res.status(STATUS_CODES.SUCCESS.code).json(
+        new ApiResponse(STATUS_CODES.SUCCESS.code, "Captain profile fetched successfully", { captain })
+    );
+});
