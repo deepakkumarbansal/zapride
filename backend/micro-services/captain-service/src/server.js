@@ -1,3 +1,15 @@
+import "dotenv/config";
+import { fileURLToPath } from "url";
+import path, { dirname } from "path";
+
+const filePath = fileURLToPath(import.meta.url);
+const __dirname = dirname(filePath);
+
+// dotenv.config({
+//     path: path.resolve(__dirname, "../.env"),
+// });
+
+
 import { app } from "./app.js";
 import { connectToDB } from "./db/index.js";
 import http from "http";

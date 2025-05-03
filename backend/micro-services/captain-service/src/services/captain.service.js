@@ -1,8 +1,7 @@
-import { STATUS_CODES } from "../constants";
+import { STATUS_CODES } from "../constants.js";
 import { BlackListedToken } from "../models/blacklistedToken.model.js";
 import { Captain } from "../models/captain.model.js";
 import { ApiError } from "../utils/index.js";
-import { uploadToCloudinary } from "./cloudinary.service.js";
 
 export const createCaptain = async ({ fullName, email, phone, password, avatarUrl, vehicle }) => {
     if (

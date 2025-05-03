@@ -8,7 +8,7 @@ export const register = async ({ fullName: { firstName, lastName } = {}, email="
         if (!firstName || !lastName || (!email && !phone) || !password) {
             throw new ApiError(STATUS_CODES.BAD_REQUEST.code, "All fields are required");
         }
-        const user = await User.create({ fullName: { firstName, lastName }, email, password, phone });
+        const user = await User.create({ fullName: { firstName, lastName }, email: (email ? email : undefined), password, phone : (phone ? phone : undefined) });
         user.password = undefined;
         return user;
     } catch (error) {

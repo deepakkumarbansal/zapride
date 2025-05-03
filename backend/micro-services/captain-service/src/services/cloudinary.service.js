@@ -1,5 +1,5 @@
-import { STATUS_CODES } from "../constants";
-import { ApiError } from "../utils";
+import { STATUS_CODES } from "../constants.js";
+import { ApiError } from "../utils/index.js";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 

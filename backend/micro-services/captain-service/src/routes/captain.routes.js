@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { body } from "express-validator";
-import { getProfile, login, logout, register } from "../controllers/captain.controller";
+import { getProfile, login, logout, register } from "../controllers/captain.controller.js";
 import { verifyJWT, uploadToServer } from "../middlewares/index.js";
 
 const router = Router();
 
 router.post(
     "/register",
+    uploadToServer.single("avatar"),
     [
         body("email").optional({ checkFalsy: true }).isEmail().withMessage("Email is required"),
         body("phone").optional({ checkFalsy: true }).isMobilePhone().withMessage("Phone is required"),
@@ -24,7 +25,6 @@ router.post(
         body("vehicle.color").isLength({ min: 3 }).withMessage("Please Enter a valid color"),
         body("vehicle.numberPlate").isAlphanumeric().withMessage("Please enter a valid number plate"),
     ],
-    uploadToServer.single("avatar"),
     register
 );
 

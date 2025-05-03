@@ -1,25 +1,32 @@
-import { cookieOptions, STATUS_CODES } from "../constants";
-import { Captain } from "../models/captain.model";
-import { createCaptain, getCaptainProfile, loginCaptain, logoutCaptain } from "../services/captain.service";
-import { uploadToCloudinary } from "../services/cloudinary.service";
+import { cookieOptions, STATUS_CODES } from "../constants.js";
+import { Captain } from "../models/captain.model.js";
+import { createCaptain, getCaptainProfile, loginCaptain, logoutCaptain } from "../services/captain.service.js";
+import { uploadToCloudinary } from "../services/cloudinary.service.js";
 import { ApiError, ApiResponse, asyncHandler } from "../utils/index.js";
 import { validationResult } from "express-validator";
+import fs from "fs"
 
 export const register = asyncHandler(async (req, res, next) => {
+    const avatarLocalFilePath = req.file?.path;
+    if(!avatarLocalFilePath){
+        throw new ApiError(STATUS_CODES.BAD_REQUEST.code, "Captain Image is required")
+    }  
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        fs.unlinkSync(avatarLocalFilePath); // as image is avalable in server
         throw new ApiError(STATUS_CODES.BAD_REQUEST.code, "All fields are required", errors.array());
     }
-    const { fullName, email, phone, password, vehicle } = req.body;
-    const avatarLocalFilePath = req.file?.path;
+    const { fullName, email, phone, password, vehicle } = req.body;  
     const oldCaptain = await Captain.findOne({
         $or: [{ email }, { phone }],
     });
     if (oldCaptain) {
-        throw new ApiError(STATUS_CODES.CONFLICT, "Captain already exist with same email or phone");
+        fs.unlinkSync(avatarLocalFilePath); // as image is avalable in server
+        throw new ApiError(STATUS_CODES.CONFLICT.code, "Captain already exist with same email or phone");
     }
     const avatarUrl = await uploadToCloudinary(avatarLocalFilePath);
     const captain = await createCaptain({ fullName, email, phone, password, avatarUrl, vehicle });
+    captain.password = undefined
     const token = await captain.generateAuthToken();
     res.cookie("token", token, cookieOptions)
         .status(STATUS_CODES.SUCCESS.code)

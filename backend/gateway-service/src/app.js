@@ -15,7 +15,7 @@ const app = express();
 const createProxy = (host) => {
     return proxy(host, {
         proxyErrorHandler: (err, res, next)=>{
-            console.log(`proxy error for ${host} :: ${err.message}`);
+            console.log(`proxy error for ${host}`);
             res.status(500).json({message: "Service temporarly unavailable"})
         }
     })
